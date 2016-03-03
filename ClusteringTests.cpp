@@ -773,7 +773,7 @@ void test_point_IO(ErrorContext &ec, unsigned int numRuns) {
 
 
 // - - - - - - - - - - C L U S T E R - - - - - - - - - -
-/*
+
 // Smoketest: constructor, copy constructor, destructor
 void test_cluster_smoketest(ErrorContext &ec) {
    bool pass;
@@ -1578,4 +1578,3 @@ void test_cluster_IO(ErrorContext &ec, unsigned int numRuns) {
    }
 }
 
-*/

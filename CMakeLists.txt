@@ -14,6 +14,6 @@ set(SOURCE_FILES
         ErrorContext.cpp
         ErrorContext.h
         ClusteringTests.cpp
-        ClusteringTests.h Point.cpp Cluster.cpp)
+        ClusteringTests.h )
 
 add_executable(ucd-csci2312-pa2 ${SOURCE_FILES})

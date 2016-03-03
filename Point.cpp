@@ -2,8 +2,12 @@
 // Created by Catie Cook on 2/17/16.
 //
 #include "Point.h"
+
 #include <iostream>
 #include <cmath>
+#include <sstream>
+#include <string>
+#include <iostream>
 
 
 namespace Clustering {
@@ -11,22 +15,20 @@ namespace Clustering {
 
     unsigned int Point::__idGen = 0; // id generator
 
-    //construstors
+    //constructors
     Point::Point(int i)
     {
         __id = __idGen;
         ++__idGen; // increment IDs  as they are created
-//
-//        __dim = i;
-//        __values = new double[__dim]; //array of doubles for ids
-//
-//        for (int i = 0; i < __dim; ++i)
-//        {
-//            __values[i] = 0;
-//        }
+
+        __dim = i;
+        __values = new double[__dim]; //array of doubles for ids
+
+        for (int j = 0; j < __dim; ++j)
+        {
+            __values[j] = 0;
+        }
     }
-
-
 
 
     // **** BIG THREE ******
@@ -36,6 +38,26 @@ namespace Clustering {
         __id = __idGen;
         ++__idGen; // increment IDs  as they are created
 
+        __dim = i; //create array with dims
+        __values = new double[__dim];
+        for (int j = 0; j < __dim; j++)
+        {
+            __values[j] = pDouble[j]; //fill the array with the dimemsions/data
+        }
+
+    }
+
+    Point::Point(const Point &p)
+    {
+        __dim = p.__dim;
+        __values = new double[__dim]; //values is equal to an array of __dim dimensions
+        __id = p.__id; //applying the private member functions here
+
+        for (int i = 0; i < __dim; i++)
+        {
+            __values[i] = p.__values[i]; //copying over values into new array until __dim is run through
+        }
+
     }
 
     // OVERLOADED =
@@ -43,7 +65,7 @@ namespace Clustering {
     {
         if (this != &p)
         {
-            __dim = p;
+            __dim = p.__dim;
             __id = p.__id;
         }
 
@@ -113,7 +135,7 @@ namespace Clustering {
     const Point Point::operator*(double d) const
     {
         Point p(*this);
-        p*= d;
+        p *= d; //p = d*p
 
         return p;
     }
@@ -126,27 +148,33 @@ namespace Clustering {
         return p;
     }
 
-    double &Point::operator[](int i)
+    double &Point::operator[](int index)
     {
-         return __values[i - 1];
+
+         return __values[index];
     }
 
-    Point &Clustering::operator+=(Point &point, const Point &point1)
+
+    //friends
+
+    Point &operator+=(Point &point, const Point &point1)
     {
         for (int i = 0; i < point; ++i)
         {
             point[i] += point1.getValue(i);
 
         }
+        return point;
     }
 
-    Point &Clustering::operator-=(Point &point, const Point &point1)
+    Point &operator-=(Point &point, const Point &point1)
     {
         for (int i = 0; i < point; ++i)
         {
             point[i] -= point1.getValue(i);
 
         }
+        return point;
     }
 
     const Point operator+(const Point &point, const Point &point1) //defined this in class as an example
@@ -178,11 +206,11 @@ namespace Clustering {
     {
             if (point != point1)
             {
-                return false;
+                return true;
             }
 
             else
-                return true;
+                return false;
     }
 
     bool operator>(const Point & point, const Point & point1)
@@ -190,7 +218,7 @@ namespace Clustering {
 
         if(point > point1)
         {
-            return true;
+            return point > point1;
         }
         else
             return false;
@@ -202,10 +230,10 @@ namespace Clustering {
 
         if(point < point1)
         {
-            return false;
+            return point < point1;
         }
         else
-            return true;
+            return false;
     }
 
     bool operator<=(const Point &point, const Point &point1)
@@ -215,7 +243,7 @@ namespace Clustering {
 
     bool operator>=(const Point &point, const Point &point1)
     {
-        return  !(point < point1);
+        return  !(point > point1);
 
     }
     std::ostream &operator<<(std::ostream &out, const Point &point) //module 3 lesson 11
@@ -223,30 +251,60 @@ namespace Clustering {
 
         int i = 0;
         for ( ; i < point.__dim - 1; i++)
+        {
             out << point.__values[i] << ", ";
-
+        }
         out << point.__values[i];
+
+        return out;
     }
 
 
     std::istream &operator>>(std::istream &in, Point & point) // find code for this in lesson 11.
     {
+
         std::string line;
 
         std::getline(in, line);
         int length = std::count(line.begin(), line.end(), ',') + 1;
 
 
-        return in;
+        std::stringstream ss(line);
+        int i = 0;
+
+        while (getline(in, line)) //while there are lines to read
+        {
+            std::string vals;
+            getline(ss, vals, ',');
+
+            std::stringstream valstream(vals);
+
+            valstream >> point.__values[i];
+
+            i++;
+       }
+
+
+    return in;
     }
 
 
     void Point::setValue(int i, double d)
     {
-        __values[i-1] = d;
+        if (i >= 0 && i < __dim)
+        {
+            __values[i-1] = d;
+        }
+    }
+    double Point::getValue(int d) const
+    {
+    if (d >= 0 && d <__dim)
+        return __values[d];
+        else
+        return 0;
     }
 
-}
+}//end of point.cpp
 
 
 

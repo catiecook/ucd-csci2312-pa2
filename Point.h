@@ -43,11 +43,10 @@ namespace Clustering {
 
         double &operator[](int index); //subscript operator allows you to access specific locations in array and set it to other values, instead of having to step through the array
 
-        // Friends - arithmatic with points
+        // Friends
         //WHY THEY ARE FRIENDS: three ways to overload an operator.
         friend Point &operator+=(Point &, const Point &); //this one can be changed and a reference will be returned
         friend Point &operator-=(Point &, const Point &);//the pass by reference is giving access to the actual objects, not copies.
-        friend bool operator>(const Point &, const Point &); //if pass by reference is const, don't mess with them
         friend const Point operator+(const Point &, const Point &); //object is created inside this operator, new object is returned. And object must be declaired inside this function
         friend const Point operator-(const Point &, const Point &); //Same same. This function creates a new pbject by subtracting the two pints it takes in
         /*Example:
@@ -59,7 +58,7 @@ namespace Clustering {
 
         friend bool operator==(const Point &, const Point &); //if there is no pass by reference, it is a copy, so it takes up more space. Try to avoid.
         friend bool operator!=(const Point &, const Point &);
-
+        friend bool operator>(const Point &, const Point &);
         friend bool operator<(const Point &, const Point &);
         friend bool operator<=(const Point &, const Point &);
         friend bool operator>=(const Point &, const Point &);
